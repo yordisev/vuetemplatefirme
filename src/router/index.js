@@ -10,6 +10,14 @@ const routes = [
     component: () => import('@/views/Login.vue'),
   },
   {
+    path: '/error-404',
+    name: 'error-404',
+    component: () => import('@/views/Error.vue'),
+    meta: {
+      layout: 'blank',
+    },
+  },
+  {
     path: '/modulos',
     component: () => import('@/views/Modulos.vue'),
     children: [
