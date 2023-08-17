@@ -37,8 +37,14 @@
       shaped
       class="vertical-nav-menu-items pr-5"
     >
+       <!-- <v-list-item :to="'/dashboard'">
+        <v-list-item-icon>
+          <v-icon>{{icons.mdiHomeOutline}}</v-icon>
+        </v-list-item-icon>
+        <v-list-item-title>Inicio</v-list-item-title>
+      </v-list-item> -->
       <nav-menu-link
-        title="Dashboard"
+        title="Inicio"
         :to="{ name: 'dashboard' }"
         :icon="icons.mdiHomeOutline"
       ></nav-menu-link>
@@ -65,6 +71,10 @@
           title="Error"
           :to="{ name: 'error-404' }"
           target="_blank"
+        ></nav-menu-link>
+        <nav-menu-link
+          title="Usuarios"
+          :to="{ name: 'usuarios' }"
         ></nav-menu-link>
       </nav-menu-group>
       <nav-menu-section-title title="USER INTERFACE"></nav-menu-section-title>
