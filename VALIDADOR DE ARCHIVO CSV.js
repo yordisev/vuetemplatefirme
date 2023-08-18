@@ -16,55 +16,87 @@ const validator = csv([
     name: 'Column 1',
     required: true,
     validate: (value) => /^[a-zA-Z]{2,10}$/.test(value),
+    onError: (row, value, message) => {
+        writeToResultFile(row, 'Column 1', message);
+      },
   },
   {
     name: 'Column 2',
     required: true,
     validate: (value) => /^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test(value),
+    onError: (row, value, message) => {
+        writeToResultFile(row, 'Column 2', message);
+      },
   },
   {
     name: 'Column 3',
     required: true,
     validate: (value) => /^[0-9]{10}$/.test(value),
+    onError: (row, value, message) => {
+        writeToResultFile(row, 'Column 3', message);
+      },
   },
   {
     name: 'Column 4',
     required: true,
     validate: (value) => /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(value),
+    onError: (row, value, message) => {
+        writeToResultFile(row, 'Column 4', message);
+      },
   },
   {
     name: 'Column 5',
     required: true,
     validate: (value) => /^[0-9]{3,15}$/.test(value),
+    onError: (row, value, message) => {
+        writeToResultFile(row, 'Column 5', message);
+      },
   },
   {
     name: 'Column 6',
     required: true,
     async validate(value) {
-      // Aquí podrías realizar la consulta a la base de datos MySQL para verificar el número de documento
       const isValid = await verificarNumeroDeDocumentoEnBaseDeDatos(value);
-      return isValid;
+      if (!isValid) {
+        return `Número de documento ${value} no válido o no existe en la base de datos`;
+      }
+      return true;
+    },
+    onError: (row, value, message) => {
+      writeToResultFile(row, 'Column 6', message);
     },
   },
   {
     name: 'Column 7',
     required: true,
     validate: (value) => /^CC/.test(value),
+    onError: (row, value, message) => {
+        writeToResultFile(row, 'Column 7', message);
+      },
   },
   {
     name: 'Column 8',
     required: true,
     validate: (value) => /^[A]$/.test(value),
+    onError: (row, value, message) => {
+        writeToResultFile(row, 'Column 8', message);
+      },
   },
   {
     name: 'Column 9',
     required: true,
     validate: (value) => /^[0-9]+$/.test(value) && parseInt(value) >= 100 && parseInt(value) <= 300,
+    onError: (row, value, message) => {
+        writeToResultFile(row, 'Column 9', message);
+      },
   },
   {
     name: 'Column 10',
     required: true,
     validate: (value) => /^5/.test(value),
+    onError: (row, value, message) => {
+        writeToResultFile(row, 'Column 10', message);
+      },
   },
 ]);
 
@@ -72,9 +104,29 @@ fs.createReadStream('ruta/al/archivo.csv')
   .pipe(validator)
   .pipe(fs.createWriteStream('ruta/donde/guardar/resultados.csv'));
 
-function verificarNumeroDeDocumentoEnBaseDeDatos(value) {
-  // Aquí deberías implementar la lógica para consultar la base de datos y validar el número de documento
-  // Retorna una promesa que resuelva a true si el número de documento existe, o false si no existe
-  // Por simplicidad, aquí retornamos una promesa que siempre resuelve a true
-  return Promise.resolve(true);
-}
+  function writeToResultFile(row, columnName, observation) {
+    const resultLine = `${row},${columnName},${observation}\n`;
+    fs.appendFileSync('ruta/donde/guardar/resultados.csv', resultLine);
+  }
+
+  async function verificarNumeroDeDocumentoEnBaseDeDatos(value) {
+    // Conectarte a la base de datos y realizar la consulta para verificar el número de documento
+    const connection = mysql.createConnection({
+      host: 'tu_host',
+      user: 'tu_usuario',
+      password: 'tu_contraseña',
+      database: 'tu_base_de_datos',
+    });
+  
+    return new Promise((resolve) => {
+      connection.query('SELECT COUNT(*) AS count FROM tu_tabla WHERE numero_documento = ?', [value], (error, results) => {
+        if (error) {
+          resolve(false); // En caso de error, consideramos como no válido
+        } else {
+          const count = results[0].count;
+          resolve(count > 0); // Si count es mayor a 0, el número de documento existe en la base de datos
+        }
+        connection.end();
+      });
+    });
+  }
