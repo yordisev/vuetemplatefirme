@@ -100,10 +100,48 @@ const validator = csv([
   },
 ]);
 
+const validRows = [];
+
 fs.createReadStream('ruta/al/archivo.csv')
   .pipe(validator)
-  .pipe(fs.createWriteStream('ruta/donde/guardar/resultados.csv'));
+  .pipe(fs.createWriteStream('ruta/donde/guardar/resultados.csv'))
+//   ------------------------------------------------------------------------
+  .on('data', async (data) => {
+    const isValid = await validateRow(data);
+    if (isValid) {
+      validRows.push(data);
+    }
+  })
+  .on('end', () => {
+    insertValidRowsIntoDatabase(validRows);
+    connection.end();
+  });
 
+  async function validateRow(data) {
+    // Realiza todas las validaciones para la fila
+    for (const validator of validator.validators) {
+      const isValid = await validator.validate(data[validator.name]);
+      if (!isValid) {
+        writeToResultFile(data.join(','), validator.name, 'Validation failed');
+        return false;
+      }
+    }
+    return true;
+  }
+
+  async function insertValidRowsIntoDatabase(rows) {
+    // Realiza la inserción de los registros válidos en la base de datos
+    const query = 'INSERT INTO tu_tabla (columna1, columna2, columna3, ...) VALUES (?, ?, ?)';
+    for (const row of rows) {
+      const values = row.slice(0, 3); // Ajusta esto según la estructura de tu archivo CSV
+      connection.query(query, values, (error) => {
+        if (error) {
+          console.error('Error inserting row:', error);
+        }
+      });
+    }
+  }
+//   ---------------------------------------------------------------------------
   function writeToResultFile(row, columnName, observation) {
     const resultLine = `${row},${columnName},${observation}\n`;
     fs.appendFileSync('ruta/donde/guardar/resultados.csv', resultLine);
