@@ -77,14 +77,6 @@ const routes = [
         },
       },
       {
-        path: '/error-404',
-        name: 'error-404',
-        component: () => import('@/views/Error.vue'),
-        meta: {
-          layout: 'blank',
-        },
-      },
-      {
         path: '/usuarios',
         name: 'usuarios',
         component: () => import('@/views/usuarios/Usuarios.vue'),
