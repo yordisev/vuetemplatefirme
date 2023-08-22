@@ -168,3 +168,29 @@ fs.createReadStream('ruta/al/archivo.csv')
       });
     });
   }
+
+
+app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
+
+// Connect flash
+app.use(flash());
+
+// Global variables
+app.use(function(req, res, next) {
+    res.locals.success_msg = req.flash('success_msg');
+    res.locals.error_msg = req.flash('error_msg');
+    res.locals.error = req.flash('error');
+    res.locals.user = req.user
+    next();
+});
+
+app.use(function(err, req, res, next) {
+    res.render('error', {
+        error : err
+    })
+})
+
+app.listen(port, () => {
+    console.log(`app is running on port ${port}`)
+});
