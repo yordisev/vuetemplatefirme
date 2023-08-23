@@ -174,37 +174,60 @@ import {
   mdiCloudUploadOutline,
 } from '@mdi/js'
 export default {
-  setup() {
-    const isDialogVisible = false
-    const amount = ref(10.05)
-    const weight = ref(28.02)
-    const email = ref('example')
-    const time = ref('04:56')
-    const selectedItem = ref('')
-    const insetSwitch1 = ref(true)
-    const selectedRadio = ref('primary')
-    const picker = new Date().toISOString().substr(0, 10)
-    const menu1 = ref(false)
+  // setup() {
+  //   const isDialogVisible = false
+  //   const amount = ref(10.05)
+  //   const weight = ref(28.02)
+  //   const email = ref('example')
+  //   const time = ref('04:56')
+  //   const selectedItem = ref('')
+  //   const insetSwitch1 = ref(true)
+  //   const selectedRadio = ref('primary')
+  //   const picker = new Date().toISOString().substr(0, 10)
+  //   const menu1 = ref(false)
+  //   return {
+  //     amount,
+  //     weight,
+  //     email,
+  //     time,
+  //     selectedItem,
+  //     insetSwitch1,
+  //     selectedRadio,
+  //     picker,
+  //     menu1,
+  //     icons2: {
+  //       mdiCheckboxMarkedCircleOutline,
+  //       mdiCancel,
+  //       mdiMinusCircleOutline,
+  //       mdiArrowLeft,
+  //       mdiWrenchOutline,
+  //       mdiCloudUploadOutline,
+  //     },
+
+  //     isDialogVisible,
+  //   }
+  // },
+   data() {
     return {
-      amount,
-      weight,
-      email,
-      time,
-      selectedItem,
-      insetSwitch1,
-      selectedRadio,
-      picker,
-      menu1,
+       isDialogVisible: false,
+        amount: 10.05,
+        weight: 28.02,
+        email: 'example',
+        time: '04:56',
+        selectedItem: '',
+        insetSwitch1: true,
+        selectedRadio: 'primary',
+        picker: new Date().toISOString().substr(0, 10),
+        menu1: false,
       icons2: {
-        mdiCheckboxMarkedCircleOutline,
-        mdiCancel,
-        mdiMinusCircleOutline,
-        mdiArrowLeft,
-        mdiWrenchOutline,
-        mdiCloudUploadOutline,
+        mdiCheckboxMarkedCircleOutline:mdiCheckboxMarkedCircleOutline,
+        mdiCancel:mdiCancel,
+        mdiMinusCircleOutline:mdiMinusCircleOutline,
+        mdiArrowLeft:mdiArrowLeft,
+        mdiWrenchOutline:mdiWrenchOutline,
+        mdiCloudUploadOutline:mdiCloudUploadOutline,
       },
 
-      isDialogVisible,
     }
   },
    methods: {
