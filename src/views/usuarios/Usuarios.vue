@@ -68,8 +68,8 @@
         </v-icon>
       </v-btn>
 
-      <v-btn color="secondary" @click="showSuccessToast" dark>
-        <v-icon dark left> {{ icons2.mdiMinusCircleOutline }} </v-icon>Cancel
+      <v-btn color="secondary" @click="isDialogVisible = true" dark>
+        <v-icon dark left> {{ icons2.mdiMinusCircleOutline }} </v-icon>Ver Modal
       </v-btn>
 
       <v-btn color="success" @click="showErrorToast" dark>
